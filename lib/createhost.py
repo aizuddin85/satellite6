@@ -32,38 +32,38 @@ def json_get(location):
 
 def json_post(location, json_data):
     result = requests.post(
-           location,
-           data=json_data,
-           auth=(SATUSER, SATPASS),
-           verify=SSL_VERIFY,
-           headers=POST_HEADERS)
+        location,
+        data=json_data,
+        auth=(SATUSER, SATPASS),
+        verify=SSL_VERIFY,
+        headers=POST_HEADERS)
     return result.json()
 
 def host_check_exist(api_uri, name):
     check_host = json_get(api_uri + "?search=%s" % name)
     print check_host
     if len(check_host['results']) != 0:
-         return True
+        return True
 
 def host_create_new(api_uri, name, env_id, ip_addr, mac_addr, arch_id, dom_id, loc_name, dom_name, build_status, hostgrp_id, org_name, sub_name, lang_value, keyboard_value, timezone_value, disk_value, managedby_value, access_value):
     host_new_id =  json_post(
-    api_uri,json.dumps(
-    {
-        "name" : name,
-        "environment_id" : env_id,
-        "ip" : ip_addr,
-        "mac" : mac_addr,
-        "architecture_id" : arch_id,
-        "domain_id" : dom_id,
-        "location_name": loc_name,
-        "interfaces.domain": dom_name,
-        "build": build_status,
-        "hostgroup_id" : hostgrp_id,
-        "organization_name": org_name,
-        "subnet_name": sub_name,
-        "host_parameters_attributes" : [{"name": "lang_set", "value": lang_value}, {"name": "keyboard_set", "value": keyboard_value},
-         {"name": "timezone_set", "value": timezone_value}, {"name": "disk_set", "value": disk_value}, {"name": "managedby", "value": managedby_value}, {"name": "access_pass", "value": access_value}]}
-    ))
+        api_uri,json.dumps(
+            {
+                "name" : name,
+                "environment_id" : env_id,
+                "ip" : ip_addr,
+                "mac" : mac_addr,
+                "architecture_id" : arch_id,
+                "domain_id" : dom_id,
+                "location_name": loc_name,
+                "interfaces.domain": dom_name,
+                "build": build_status,
+                "hostgroup_id" : hostgrp_id,
+                "organization_name": org_name,
+                "subnet_name": sub_name,
+                "host_parameters_attributes" : [{"name": "lang_set", "value": lang_value}, {"name": "keyboard_set", "value": keyboard_value},
+                                                {"name": "timezone_set", "value": timezone_value}, {"name": "disk_set", "value": disk_value}, {"name": "managedby", "value": managedby_value}, {"name": "access_pass", "value": access_value}]}
+        ))
     print host_new_id
 
 
@@ -74,12 +74,12 @@ def check_path(path):
 
 
 def check_installhash(installpass, adinstallhash):
-     hash = hashlib.md5()
-     hash.update(installpass)
-     if hash.hexdigest() not in adinstallhash:
-         return False
-     else:
-         return True
+    hash = hashlib.md5()
+    hash.update(installpass)
+    if hash.hexdigest() not in adinstallhash:
+        return False
+    else:
+        return True
 
 if check_path(KEYTAB_FILE) is False:
     print "Error: No Keytab file found!"
@@ -94,12 +94,12 @@ if kinit != 0:
 
 
 attrs = ["LNXManagedBy", \
-"LNXIPAddress", \
-"LNXLanguage", \
-"LNXKeyboard", \
-"LNXTimezone", \
-"LNXHardware", \
-"LNXComputerInstallHash"]
+         "LNXIPAddress", \
+         "LNXLanguage", \
+         "LNXKeyboard", \
+         "LNXTimezone", \
+         "LNXHardware", \
+         "LNXComputerInstallHash"]
 
 
 
@@ -116,51 +116,51 @@ if len(ldap_result) == 0:
 
 
 for attr,key in ldap_result:
-   if 'LNXLanguage' in key:
-       for lang in key.get('LNXLanguage'):
-           lang_val = lang
-   else:
-       print "Error: Missing LNXLanguage in AD!"
-       sys.exit(1)
+    if 'LNXLanguage' in key:
+        for lang in key.get('LNXLanguage'):
+            lang_val = lang
+    else:
+        print "Error: Missing LNXLanguage in AD!"
+        sys.exit(1)
 
-   if 'LNXKeyboard' in key:
-       for keyboard in key.get('LNXKeyboard'):
-           keyboard_val = keyboard
-   else:
-       print "Error Missing LNXKeyboard in AD!"
-       sys.exit(1)
+    if 'LNXKeyboard' in key:
+        for keyboard in key.get('LNXKeyboard'):
+            keyboard_val = keyboard
+    else:
+        print "Error Missing LNXKeyboard in AD!"
+        sys.exit(1)
 
-   if 'LNXTimezone' in key:
-       for tzone in key.get('LNXTimezone'):
-           timezone_val = tzone
-   else:
-       print "Error: Missing LNXTimezone in AD!"
-       sys.exit(1)
+    if 'LNXTimezone' in key:
+        for tzone in key.get('LNXTimezone'):
+            timezone_val = tzone
+    else:
+        print "Error: Missing LNXTimezone in AD!"
+        sys.exit(1)
 
-   if 'LNXHardware' in key:
-       for hdisk in key.get('LNXHardware'):
-           disk_val = hdisk
-   else:
-       print "Error: Missing LNXHardware in AD!"
-       sys.exit(1)
+    if 'LNXHardware' in key:
+        for hdisk in key.get('LNXHardware'):
+            disk_val = hdisk
+    else:
+        print "Error: Missing LNXHardware in AD!"
+        sys.exit(1)
 
-   if 'LNXComputerInstallHash' in key:
-       for kickhash in key.get('LNXComputerInstallHash'):
-           access_val = kickhash
-   else:
-       print "Error: Missing LNXComputerInstallHash in AD!"
-       sys.exit(1)
+    if 'LNXComputerInstallHash' in key:
+        for kickhash in key.get('LNXComputerInstallHash'):
+            access_val = kickhash
+    else:
+        print "Error: Missing LNXComputerInstallHash in AD!"
+        sys.exit(1)
 
-   if 'LNXIPAddress' in key:
-       for ip in key.get('LNXIPAddress'):
-           ipaddress = ip
-   else:
+    if 'LNXIPAddress' in key:
+        for ip in key.get('LNXIPAddress'):
+            ipaddress = ip
+    else:
         print "Erorr: Missing LNXIPAddress in AD!"
         sys.exit(1)
-   if 'LNXManagedBy' in key:
-       for manage in key.get('LNXManagedBy'):
-           managedby = manage
-   else:
+    if 'LNXManagedBy' in key:
+        for manage in key.get('LNXManagedBy'):
+            managedby = manage
+    else:
         print "Error: Missing LNXManagedBy in AD!"
         sys.exit(1)
 
